@@ -71,7 +71,7 @@ render = () => {
         </a>
       </header>
 
-      <form onSubmit={this.createPerson}>
+      <form action="/api/" method="post">
         <input onChange={this.newName} type="text" placeholder="Name"/>
         <input onChange={this.newMessage} type="text" placeholder="Message"/>
           <input type="submit" value="Submit"/>
