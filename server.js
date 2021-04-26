@@ -200,12 +200,6 @@ app.get("/coins", function(req, response) {
 })
 
 
-app.get("/", (req, res) => {
-	res.send({greet: "server working"});
-})
-
-
-
 // --> Add this
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
