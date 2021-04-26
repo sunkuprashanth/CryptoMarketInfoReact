@@ -200,10 +200,6 @@ app.get("/coins", function(req, response) {
 })
 
 
-app.listen(process.env.PORT || 5000, function() {
-	console.log("server Running at specified Port" + process.env.PORT);
-})
-
 app.get("/", (req, res) => {
 	res.send({greet: "server working"});
 })
