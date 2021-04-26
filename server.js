@@ -29,9 +29,9 @@ app.use(cors(corsOptions))
 app.get('/api/', (req, res) => {
   res.send({ people: 'You want to see people I assume' });
 });
-app.post('/api/', (req, res) => {
+app.post('/login', (req, res) => {
   res.send(
-    `Person created: ${req.body.person.name}`,
+    `Person created: ${req.body.username}`,
   );
 });
 
