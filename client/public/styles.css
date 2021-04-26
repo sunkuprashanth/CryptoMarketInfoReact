@@ -1,0 +1,13 @@
+.card-custom {
+	background-color: #adb5bd;
+	z-index: 3px;
+}
+
+.del_btn {
+	float: right;
+}
+
+.tbody {
+	background-color: #adb5bd;
+	display: block;
+}
