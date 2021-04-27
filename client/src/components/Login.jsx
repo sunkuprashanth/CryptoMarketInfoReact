@@ -17,10 +17,14 @@ function Login() {
 								<input class="form-control" name="username" placeholder="Enter Your Username"/><br />
 								<input class="form-control" type="password" name="password" placeholder="Enter Your Password"/><br />
 							</div>
-							<button class="btn-dark btn">Login</button>
+							<button class="btn-dark btn" id="login">Login</button>
 						</center>
 					</form>
-					<p class="text-center mt-3 mb-5">New User? <a href="/register">Register Here</a></p>
+					{//<p class="mt-3 text-center text-danger bg-gradient col-sm-3 p-1">Incorrect Password</p>
+					}
+					<center>
+						<p class="text-center mt-3 mb-5">New User? <a href="/register">Register Here</a></p>
+					</center>
 				</div>
 			</center>
 		</div>

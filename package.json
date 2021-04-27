@@ -13,6 +13,7 @@
     "express-session": "^1.17.1",
     "helmet": "^3.23.3",
     "https": "^1.0.0",
+    "jquery": "^3.6.0",
     "mongoose": "^5.12.5",
     "mongoose-findorcreate": "^3.0.0",
     "node-fetch": "^2.6.1",
@@ -21,7 +22,6 @@
     "passport-local-mongoose": "^6.1.0",
     "path": "^0.12.7"
   },
-  "devDependencies": {},
   "scripts": {
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",

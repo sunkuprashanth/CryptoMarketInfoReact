@@ -1,6 +1,9 @@
 import React from "react";
+import Home from "./Home"
 
 function CryptoView(props) {
+
+
 	return (
 		<div className="col-lg-3 card card-custom m-5">
 			<div className="card-body">
@@ -10,7 +13,7 @@ function CryptoView(props) {
 			<p className="card-text pb-2">Market Supply:  {props.market_supply}</p>
 			</div>
 			<form className="form" method="POST" action="/deleteCoin">
-				<button name="coin_slug" className="close btn btn-warning text-center mb-3 del_btn" value={props.slug} aria-label="Close">
+				<button id="coin_slug" className="close btn btn-warning text-center mb-3 del_btn" onClick="" type="button" value={props.slug} aria-label="Close">
 					Remove
 				</button>
 			</form>

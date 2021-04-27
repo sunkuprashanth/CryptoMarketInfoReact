@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // --> Add this
 // ** MIDDLEWARE ** //
-const whitelist = ['http://localhost:3000', 'http://localhost:8080', 'https://shrouded-journey-38552.herokuapp.com', 'https://crypto-market-combo.herokuapp.com']
+const whitelist = ['http://localhost:3000', 'http://localhost:8080','http://localhost:8080/', 'https://shrouded-journey-38552.herokuapp.com', 'https://crypto-market-combo.herokuapp.com']
 const corsOptions = {
   origin: function (origin, callback) {
     console.log("** Origin of request " + origin)
@@ -80,10 +80,29 @@ app.post("/login", function(req, res) {
 	req.login(user_login, function(err) {
 		if(err) {
 			console.log(err);
-			res.redirect("/");
 		} else {
 			passport.authenticate("local")(req, res, function(){
 				res.redirect("/home");
+			});
+		}
+	});
+});
+
+app.post("/loginVerify", function(req, res) {
+
+	const user_login = new userCollection({
+		username: req.body.username,
+		password: req.body.password
+	});
+	console.log(user_login);
+
+	req.login(user_login, function(err) {
+		if(err) {
+			console.log(err);
+			res.send({auth:"Failure"})
+		} else {
+			passport.authenticate("local", { failureRedirect: '/login'})(req, res, function(){
+				res.send({auth:"Success"})
 			});
 		}
 	});
@@ -126,38 +145,69 @@ app.get("/logout", function(req, res) {
 });
 
 app.post("/deleteCoin", function(req, res) {
-	console.log();
 	coin = req.body.coin_slug;
 	ind = req.user.Cryptos.indexOf(coin);
 	req.user.Cryptos = req.user.Cryptos.filter(c => {
 		return c!==coin;
 	})
 	userCollection.findOneAndUpdate({username: req.user.username}, req.user, {upsert: true}, function(err, result) {
-		if(err)
+		if(err) {
 			console.log(err);
-		else 
+			res.json({status:err});
+		}
+		else {
 			console.log(result);
+			res.json({status: result})
+
+		}
 	});
 	console.log(req.user.Cryptos);
-	res.redirect("/home");
+	//res.redirect("/home");
 	//console.log(req.user.Cryptos);
 });
 
 app.post("/addCoin", function(req, res) {
 	coin = req.body.coinSelected;
 	console.log(coin);
+	console.log("Message Received");
 	if (coin==="null" || req.user.Cryptos.includes(coin)) {
-		res.redirect("/home");
+		//res.redirect("/home");
+		res.json({status: "Failed"})
 		return;
 	}
 	req.user.Cryptos.push(coin);
 	userCollection.findOneAndUpdate({username: req.user.username}, req.user, {upsert: true}, function(err, result) {
 		if(err)
 			console.log(err);
-		else
+		else {
 			console.log(result);
+			res.redirect("/coin/"+coin);
+		}
 	});
-	res.redirect("/home");
+	//res.json({status: "Success"})
+});
+
+app.get('/coin/:coin', function(req, resp) {
+	coin = req.params.coin;
+	console.log(coin);
+	getCoinInfo(coin).then(console.log("hello"));
+	async function getCoinInfo(coin) {
+		url="https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?CMC_PRO_API_KEY="+process.env.API_KEY+"&slug="+coin+"&convert=inr";
+		const res = await fetch(url);
+		const json = await res.json();
+		var value;  
+		Object.keys(json.data).forEach(function(key) {
+			value = json.data[key];
+			resp.json({
+				id: value['id'],
+				slug: coin,
+				name: value['name'],
+				symbol: value['symbol'],
+				price: value['quote']['INR']['price'],
+				market_supply: value['circulating_supply']
+			});
+		});
+}
 });
 
 
@@ -165,6 +215,7 @@ app.post("/addCoin", function(req, res) {
 app.get("/coins", function(req, response) {
 	l_aarr=[];
 	if (!req.isAuthenticated()) {
+		console.log("hello");
 		response.send({auth:null});
 	}
 	Cryptos = req.user.Cryptos;
@@ -174,7 +225,8 @@ app.get("/coins", function(req, response) {
 		url="https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?CMC_PRO_API_KEY="+process.env.API_KEY+"&slug="+coin+"&convert=inr";
 		const res = await fetch(url);
 		const json = await res.json();
-		var value;  
+		var value;
+		console.log(json.data, json);
 		Object.keys(json.data).forEach(function(key) {
 			value = json.data[key];
 			l_aarr.push({
@@ -199,6 +251,7 @@ app.get("/coins", function(req, response) {
 	});
 })
 
+//app.post("")
 
 // --> Add this
 if (process.env.NODE_ENV === 'production') {
